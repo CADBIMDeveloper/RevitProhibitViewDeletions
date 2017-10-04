@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Application">
+    <Name>Application RevitProhibitViewDeletions</Name>
+    <Assembly>RevitProhibitViewDeletions.dll</Assembly>
+    <FullClassName>RevitProhibitViewDeletions.RevitApplication</FullClassName>
+    <ClientId>974981fd-9b3c-4f5e-af28-5440029e3f56</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
