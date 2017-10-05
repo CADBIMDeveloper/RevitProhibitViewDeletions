@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Updaters\IElementUpdater.cs" />
     <Compile Include="RevitApplication.cs" />
     <Compile Include="Entities\DocumentsCollection.cs" />
     <Compile Include="Entities\DocumentViewsCache.cs" />
