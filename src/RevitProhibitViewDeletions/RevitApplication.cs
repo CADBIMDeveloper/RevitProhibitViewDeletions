@@ -82,6 +82,10 @@ namespace RevitProhibitViewDeletions
         private void ControlledApplicationOnDocumentSynchronizedWithCentral(object sender, DocumentSynchronizedWithCentralEventArgs e)
         {
             SetUpdatersActivity(false);
+
+            var document = documents.GetCacheForDocument(e.Document);
+
+            document.Refresh();
         }
 
         private void SetUpdatersActivity(bool isSuspended)
