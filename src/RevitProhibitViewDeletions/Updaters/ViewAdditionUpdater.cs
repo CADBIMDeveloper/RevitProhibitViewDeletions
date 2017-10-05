@@ -4,7 +4,7 @@ using RevitProhibitViewDeletions.Entities;
 
 namespace RevitProhibitViewDeletions.Updaters
 {
-    public class ViewAdditionUpdater : IUpdater
+    public class ViewAdditionUpdater : IElementUpdater
     {
         private readonly DocumentsCollection documents;
         private readonly UpdaterId updaterId;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.UI;
@@ -9,8 +10,8 @@ namespace RevitProhibitViewDeletions
     public class RevitApplication : IExternalApplication
     {
         private readonly DocumentsCollection documents = new DocumentsCollection();
-        private ViewDeletionUpdater viewDeletionUpdater;
-        private ViewAdditionUpdater viewAdditionUpdater;
+        private readonly IList<IElementUpdater> updaters = new List<IElementUpdater>();
+        
 
         public Result OnStartup(UIControlledApplication application)
         {
@@ -40,16 +41,20 @@ namespace RevitProhibitViewDeletions
 
         private void CreateViewDeletionUpdater(AddInId addInId)
         {
-            viewDeletionUpdater = new ViewDeletionUpdater(addInId, documents);
+            var viewDeletionUpdater = new ViewDeletionUpdater(addInId, documents);
 
             RegisterUpdater(viewDeletionUpdater, Element.GetChangeTypeElementDeletion());
+
+            updaters.Add(viewDeletionUpdater);
         }
 
         private void CreateViewAdditionUpdater(AddInId addInId)
         {
-            viewAdditionUpdater = new ViewAdditionUpdater(addInId, documents);
+            var viewAdditionUpdater = new ViewAdditionUpdater(addInId, documents);
 
             RegisterUpdater(viewAdditionUpdater, Element.GetChangeTypeElementAddition());
+
+            updaters.Add(viewAdditionUpdater);
         }
 
         private static void RegisterUpdater(IUpdater updater, ChangeType changeType)
@@ -71,16 +76,18 @@ namespace RevitProhibitViewDeletions
 
         private void ControlledApplicationOnDocumentSynchronizingWithCentral(object sender, DocumentSynchronizingWithCentralEventArgs e)
         {
-            viewDeletionUpdater.IsSuspended = true;
-
-            viewAdditionUpdater.IsSuspended = true;
+            SetUpdatersActivity(true);
         }
 
         private void ControlledApplicationOnDocumentSynchronizedWithCentral(object sender, DocumentSynchronizedWithCentralEventArgs e)
         {
-            viewDeletionUpdater.IsSuspended = false;
+            SetUpdatersActivity(false);
+        }
 
-            viewAdditionUpdater.IsSuspended = false;
+        private void SetUpdatersActivity(bool isSuspended)
+        {
+            foreach (var elementUpdater in updaters)
+                elementUpdater.IsSuspended = isSuspended;
         }
 
         private void ControlledApplicationOnDocumentClosing(object sender, DocumentClosingEventArgs e)
